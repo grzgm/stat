@@ -124,3 +124,6 @@ plt.show()
 mean_engagement_times = dataset.groupby('Theme')['EngagementTime'].mean().reset_index()
 
 print(mean_engagement_times)
+
+print(dark_theme)
+print(light_theme)
