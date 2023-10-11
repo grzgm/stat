@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.interpolate as interp
+import scipy.stats as stats
 import json
 
 # Set a random seed for reproducibility
@@ -102,8 +103,12 @@ light_engagement_times = dataset[dataset['Theme'] == 'Light']['EngagementTime']
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 9))
 bin_width = 1.5
-ax1.hist(dark_engagement_times.values, int((max(dark_engagement_times.values) - min(dark_engagement_times.values)) / bin_width), color='#000000', edgecolor='#bbbbbb')
-ax2.hist(light_engagement_times.values, int((max(light_engagement_times.values) - min(light_engagement_times.values)) / bin_width), color='#bbbbbb', edgecolor='#000000')
+ax1.hist(dark_engagement_times.values,
+         int((max(dark_engagement_times.values) - min(dark_engagement_times.values)) / bin_width), color='#000000',
+         edgecolor='#bbbbbb')
+ax2.hist(light_engagement_times.values,
+         int((max(light_engagement_times.values) - min(light_engagement_times.values)) / bin_width), color='#bbbbbb',
+         edgecolor='#000000')
 
 ax1.set_title('Website Engagement Times Comparison by Theme')
 ax1.set_xlabel('Engagement Time (seconds)')
@@ -118,12 +123,44 @@ ax2.grid(True)
 ax1.set_xlim(30, 60)
 ax2.set_xlim(30, 60)
 
-plt.show()
+# plt.show()
 
 # Calculate and compare the mean engagement times
 mean_engagement_times = dataset.groupby('Theme')['EngagementTime'].mean().reset_index()
-
 print(mean_engagement_times)
 
-print(dark_theme)
-print(light_theme)
+# Calculate and compare the mean ratings
+mean_ratings = dataset.groupby('Theme')['Rating'].mean().reset_index()
+print(mean_ratings)
+
+### T test for Rating mean
+dark_mean = mean_ratings[mean_ratings['Theme'] == 'Dark']['Rating'].values[0]
+light_mean = mean_ratings[mean_ratings['Theme'] == 'Light']['Rating'].values[0]
+
+# Perform independent samples t-test
+t_stat_scipy, p_value_scipy = stats.ttest_ind(dataset[dataset['Theme'] == 'Dark']["Rating"], dataset[dataset['Theme'] == 'Light']["Rating"])
+
+print("T-Statistic_scipy:", t_stat_scipy)
+print("P-Value_scipy:", p_value_scipy)
+
+# Manual Calculations
+# Calculate standard deviation
+standard_deviation_dark = np.std(dark_theme["Rating"])
+# Calculate sample size
+sample_size_dark = len(dark_theme["Rating"])
+
+# Calculate standard deviation
+standard_deviation_light = np.std(light_theme["Rating"])
+# Calculate sample size
+sample_size_light = len(light_theme["Rating"])
+
+# Calculate standard error
+standard_error = np.sqrt((standard_deviation_dark**2 / sample_size_dark) + (standard_deviation_light**2 / sample_size_light))
+
+# Perform independent samples t-test
+t_score = (dark_mean - light_mean) / standard_error
+
+p_value = stats.t.sf(np.abs(t_score), 78)*2
+
+print("T-Statistic:", t_score)
+print("P-Value:", p_value)
