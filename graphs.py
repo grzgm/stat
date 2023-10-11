@@ -134,33 +134,41 @@ mean_ratings = dataset.groupby('Theme')['Rating'].mean().reset_index()
 print(mean_ratings)
 
 ### T test for Rating mean
-dark_mean = mean_ratings[mean_ratings['Theme'] == 'Dark']['Rating'].values[0]
-light_mean = mean_ratings[mean_ratings['Theme'] == 'Light']['Rating'].values[0]
-
 # Perform independent samples t-test
-t_stat_scipy, p_value_scipy = stats.ttest_ind(dataset[dataset['Theme'] == 'Dark']["Rating"], dataset[dataset['Theme'] == 'Light']["Rating"])
+t_value, p_value = stats.ttest_ind(dataset[dataset['Theme'] == 'Dark']["Rating"], dataset[dataset['Theme'] == 'Light']["Rating"])
 
-print("T-Statistic_scipy:", t_stat_scipy)
-print("P-Value_scipy:", p_value_scipy)
+print("T-Statistic_scipy:", t_value)
+print("P-Value_scipy:", p_value)
 
-# Manual Calculations
-# Calculate standard deviation
-standard_deviation_dark = np.std(dark_theme["Rating"])
-# Calculate sample size
-sample_size_dark = len(dark_theme["Rating"])
+# # Manual Calculations
+# dark_mean = mean_ratings[mean_ratings['Theme'] == 'Dark']['Rating'].values[0]
+# light_mean = mean_ratings[mean_ratings['Theme'] == 'Light']['Rating'].values[0]
+#
+# # Calculate standard deviation
+# standard_deviation_dark = np.std(dark_theme["Rating"])
+# # Calculate sample size
+# sample_size_dark = len(dark_theme["Rating"])
+#
+# # Calculate standard deviation
+# standard_deviation_light = np.std(light_theme["Rating"])
+# # Calculate sample size
+# sample_size_light = len(light_theme["Rating"])
+#
+# # Calculate standard error
+# standard_error = np.sqrt((standard_deviation_dark**2 / sample_size_dark) + (standard_deviation_light**2 / sample_size_light))
+#
+# # Perform independent samples t-test
+# t_score = (dark_mean - light_mean) / standard_error
+#
+# p_value = stats.t.sf(np.abs(t_score), 78)*2
+#
+# print("T-Statistic:", t_score)
+# print("P-Value:", p_value)
 
-# Calculate standard deviation
-standard_deviation_light = np.std(light_theme["Rating"])
-# Calculate sample size
-sample_size_light = len(light_theme["Rating"])
-
-# Calculate standard error
-standard_error = np.sqrt((standard_deviation_dark**2 / sample_size_dark) + (standard_deviation_light**2 / sample_size_light))
-
+### T test for Engagement Time mean
 # Perform independent samples t-test
-t_score = (dark_mean - light_mean) / standard_error
+t_value, p_value = stats.ttest_ind(dataset[dataset['Theme'] == 'Dark']["EngagementTime"], dataset[dataset['Theme'] == 'Light']["EngagementTime"])
 
-p_value = stats.t.sf(np.abs(t_score), 78)*2
-
-print("T-Statistic:", t_score)
-print("P-Value:", p_value)
+print("T-Statistic_scipy:", t_value)
+print("P-Value_scipy:", p_value)
+print("P-Value_scipy:", ("%.17f" % p_value).rstrip('0').rstrip('.'))
