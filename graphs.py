@@ -125,13 +125,13 @@ ax2.set_xlim(30, 60)
 
 # plt.show()
 
-# Calculate and compare the mean engagement times
-mean_engagement_times = dataset.groupby('Theme')['EngagementTime'].mean().reset_index()
-print(mean_engagement_times)
-
 # Calculate and compare the mean ratings
 mean_ratings = dataset.groupby('Theme')['Rating'].mean().reset_index()
 print(mean_ratings)
+
+# Calculate and compare the mean engagement times
+mean_engagement_times = dataset.groupby('Theme')['EngagementTime'].mean().reset_index()
+print(mean_engagement_times)
 
 ### T test for Rating mean
 # Perform independent samples t-test
@@ -169,6 +169,5 @@ print("P-Value_scipy:", p_value)
 # Perform independent samples t-test
 t_value, p_value = stats.ttest_ind(dataset[dataset['Theme'] == 'Dark']["EngagementTime"], dataset[dataset['Theme'] == 'Light']["EngagementTime"])
 
-print("T-Statistic_scipy:", t_value)
-print("P-Value_scipy:", p_value)
-print("P-Value_scipy:", ("%.17f" % p_value).rstrip('0').rstrip('.'))
+print("T-Statistic for Engagement Time:", t_value)
+print("P-Value for Engagement Time:", ("%.17f" % p_value).rstrip('0').rstrip('.'))
