@@ -123,7 +123,7 @@ ax2.grid(True)
 ax1.set_xlim(30, 60)
 ax2.set_xlim(30, 60)
 
-# plt.show()
+plt.show()
 
 # Calculate and compare the mean ratings
 mean_ratings = dataset.groupby('Theme')['Rating'].mean().reset_index()
@@ -133,12 +133,27 @@ print(mean_ratings)
 mean_engagement_times = dataset.groupby('Theme')['EngagementTime'].mean().reset_index()
 print(mean_engagement_times)
 
+# Mean and Standard Deviation of Rating Samples
+# Calculate mean
+dark_rating_mean_value = np.mean(dataset[dataset['Theme'] == 'Dark']["Rating"])
+# Calculate standard deviation
+dark_rating_std_deviation = np.std(dataset[dataset['Theme'] == 'Dark']["Rating"])
+print("Dark Theme Rating Mean Value: ", dark_rating_mean_value)
+print("Dark Theme Rating Standard Deviation: ", dark_rating_std_deviation)
+
+# Calculate mean
+light_rating_mean_value = np.mean(dataset[dataset['Theme'] == 'Light']["Rating"])
+# Calculate standard deviation
+light_rating_std_deviation = np.std(dataset[dataset['Theme'] == 'Light']["Rating"])
+print("Light Theme Rating Mean Value: ", light_rating_mean_value)
+print("Light Theme Rating Standard Deviation: ", light_rating_std_deviation)
+
 ### T test for Rating mean
 # Perform independent samples t-test
 t_value, p_value = stats.ttest_ind(dataset[dataset['Theme'] == 'Dark']["Rating"], dataset[dataset['Theme'] == 'Light']["Rating"])
 
-print("T-Statistic_scipy:", t_value)
-print("P-Value_scipy:", p_value)
+print("T-Statistic for Rating:", t_value)
+print("P-Value for Rating:", p_value)
 
 # # Manual Calculations
 # dark_mean = mean_ratings[mean_ratings['Theme'] == 'Dark']['Rating'].values[0]
@@ -165,7 +180,22 @@ print("P-Value_scipy:", p_value)
 # print("T-Statistic:", t_score)
 # print("P-Value:", p_value)
 
-### T test for Engagement Time mean
+## Mean and Standard Deviation of Engagement Time Samples
+# Calculate mean
+dark_engagement_time_mean_value = np.mean(dataset[dataset['Theme'] == 'Dark']["EngagementTime"])
+# Calculate standard deviation
+dark_engagement_time_std_deviation = np.std(dataset[dataset['Theme'] == 'Dark']["EngagementTime"])
+print("Dark Theme Engagement Time Mean Value: ", dark_engagement_time_mean_value)
+print("Dark Theme Engagement Time Standard Deviation: ", dark_engagement_time_std_deviation)
+
+# Calculate mean
+light_engagement_time_mean_value = np.mean(dataset[dataset['Theme'] == 'Light']["EngagementTime"])
+# Calculate standard deviation
+light_engagement_time_std_deviation = np.std(dataset[dataset['Theme'] == 'Light']["EngagementTime"])
+print("Light Theme Engagement Time Mean Value: ", light_engagement_time_mean_value)
+print("Light Theme Engagement Time Standard Deviation: ", light_engagement_time_std_deviation)
+
+## T test for Engagement Time mean
 # Perform independent samples t-test
 t_value, p_value = stats.ttest_ind(dataset[dataset['Theme'] == 'Dark']["EngagementTime"], dataset[dataset['Theme'] == 'Light']["EngagementTime"])
 
